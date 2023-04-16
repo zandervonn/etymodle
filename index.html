@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Wordle Quiz</title>
+	<title>Etymology Wordle Quiz</title>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -19,10 +19,9 @@
 			color: #333;
 		}
 
-		#wordle {
+		#categories {
 			margin-top: 50px;
-			font-size: 36px;
-			font-weight: bold;
+			font-size: 24px;
 			color: #333;
 		}
 
@@ -51,49 +50,53 @@
 	</style>
 </head>
 <body>
-	<h1>Guess the Wordle!</h1>
-	<p>Guess the five-letter word:</p>
-	<div id="wordle"></div>
-	<input type="text" id="guess" maxlength="5" placeholder="Type your guess here...">
+	<h1>Guess the Word with Etymology Clues!</h1>
+	<p>Here are some clues about the word:</p>
+	<div id="categories"></div>
+	<input type="text" id="guess" maxlength="15" placeholder="Type your guess here...">
 	<button id="submit">Submit</button>
 
 	<script>
-		// Array of possible words
-		var words = ['apple', 'happy', 'crazy', 'silly', 'sunny'];
+		// Array of possible words with etymology clues
+		var words = [
+			{
+				word: 'apple',
+				length: '5',
+				type: 'noun',
+				root: 'Old English æppel',
+				rhyme: 'grapple',
+				synonym: 'fruit',
+				antonym: 'meat'
+			},
+			// Add more words with etymology clues here
+		];
 
 		// Choose a random word from the array
-		var word = words[Math.floor(Math.random() * words.length)];
+		var wordObj = words[Math.floor(Math.random() * words.length)];
 
-		// Display the Wordle
-		var wordle = '';
-		for (var i = 0; i < word.length; i++) {
-			wordle += '-';
-		}
-		document.getElementById('wordle').innerHTML = wordle;
+		// Display the etymology clues
+		var categories = `
+			<p>Length: ${wordObj.length}</p>
+			<p>Type: ${wordObj.type}</p>
+			<p>Etymological Root: ${wordObj.root}</p>
+			<p>Rhyme: ${wordObj.rhyme}</p>
+			<p>Synonym: ${wordObj.synonym}</p>
+			<p>Antonym: ${wordObj.antonym}</p>
+		`;
+		document.getElementById('categories').innerHTML = categories;
 
 		// Handle guess submission
 		var submitButton = document.getElementById('submit');
 		var guessInput = document.getElementById('guess');
 		submitButton.onclick = function() {
 			var guess = guessInput.value.toLowerCase();
-			if (guess.length !== 5) {
-				alert('Please enter a five-letter word.');
-				return;
-			}
-			if (guess === word) {
+			if (guess === wordObj.word) {
 				alert('Congratulations, you guessed the word!');
 				return;
+			} else {
+				alert('Incorrect guess. Try again!');
+				guessInput.value = '';
 			}
-			var newWordle = '';
-			for (var i = 0; i < word.length; i++) {
-				if (guess.indexOf(word[i]) !== -1) {
-					newWordle += word[i];
-				} else {
-					newWordle += '-';
-				}
-			}
-			document.getElementById('wordle').innerHTML = newWordle;
-			guessInput.value = '';
 		};
 	</script>
 </body>
